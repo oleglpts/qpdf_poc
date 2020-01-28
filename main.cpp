@@ -55,7 +55,8 @@ qpdf_stream_decode_level_e printDictionary(map<std::string, QPDFObjectHandle> di
                 }
                 else if (item.isName()) {
                     auto name = item.getName();
-                    level = getLevel(name);
+                    if (level == qpdf_dl_all)
+                        level = getLevel(name);
                     cout << name;
                 }
                 cout << " ";
