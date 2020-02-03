@@ -1,7 +1,10 @@
 #include <ctime>
 #include <fstream>
 #include <sstream>
+#include <unistd.h>
 #include <iostream>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <qpdf/QPDF.hh>
 #include <qpdf/Buffer.hh>
 #include <qpdf/Constants.h>
@@ -88,6 +91,9 @@ int main(int argc, const char* argv[]) {
         QPDF doc;
         doc.processFile(argv[1]);
         // Objects cycle
+        string dir = string(argv[1]).append(".qpdf_out");
+        rmdir(dir.c_str());
+        mkdir(dir.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
         for (auto object : doc.getAllObjects()) {
             if (object.isStream()) {
                 cout << "    Object " << object.getObjectID() << " has stream ";
@@ -96,7 +102,7 @@ int main(int argc, const char* argv[]) {
                 level = printDictionary(object.getDict().getDictAsMap(), level);
                 // Output file name
                 ostringstream file_name;
-                file_name << "pdf_";
+                file_name << dir << "/pdf_";
                 file_name.width(4);
                 file_name.fill ('0');
                 file_name << object.getObjectID() << "_0.dat";
