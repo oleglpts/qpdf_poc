@@ -103,7 +103,7 @@ int main(int argc, const char* argv[]) {
                 // Output file name
                 ostringstream file_name;
                 file_name << dir << "/pdf_";
-                file_name.width(4);
+                file_name.width(7);
                 file_name.fill ('0');
                 file_name << object.getObjectID() << "_0.dat";
                 // Stream output
